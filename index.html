@@ -8,387 +8,365 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --gold:    #C8A240;
-      --gold-lt: #E8CC80;
-      --gold-dk: #9A7020;
-      --ink:     #1C1A18;
-      --glass:   rgba(255,255,255,0.14);
-      --glass-b: rgba(255,255,255,0.45);
+      --gold:     #C8A240;
+      --gold-lt:  #E8CC80;
+      --gold-dk:  #9A7020;
+      --ink:      rgba(20,18,16,0.88);
+      --ink-mid:  rgba(20,18,16,0.50);
+      --ink-dim:  rgba(20,18,16,0.32);
+      --bg:       linear-gradient(155deg, #FBF8F3 0%, #F4F0FA 48%, #EEF4FB 100%);
+      --glass:    rgba(255,255,255,0.55);
+      --glass-b:  rgba(255,255,255,0.80);
     }
 
     html { scroll-behavior: smooth; }
 
     body {
       font-family: -apple-system, "PingFang SC", "Helvetica Neue", sans-serif;
-      background: #0D0B09;
-      color: #F5F3EE;
+      background: linear-gradient(155deg, #FBF8F3 0%, #F4F0FA 48%, #EEF4FB 100%);
+      background-attachment: fixed;
+      color: var(--ink);
       overflow-x: hidden;
+      min-height: 100vh;
     }
 
-    /* ── Noise texture overlay ── */
-    body::before {
-      content: '';
-      position: fixed; inset: 0; z-index: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none;
-    }
-
-    /* ─────────────────── NAV ─────────────────── */
+    /* ── NAV ── */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 18px 40px;
-      background: rgba(13,11,9,0.55);
-      backdrop-filter: blur(24px) saturate(160%);
-      border-bottom: 1px solid rgba(200,162,64,0.12);
+      padding: 16px 48px;
+      background: rgba(251,248,243,0.62);
+      backdrop-filter: blur(28px) saturate(180%);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+      border-bottom: 1px solid rgba(255,255,255,0.65);
+      box-shadow: 0 1px 24px rgba(0,0,0,0.04);
     }
     .nav-logo {
-      font-size: 22px; font-weight: 800; letter-spacing: 0.02em;
-      background: linear-gradient(135deg, var(--gold-lt), var(--gold));
+      font-size: 20px; font-weight: 900; letter-spacing: -0.01em;
+      background: linear-gradient(135deg, var(--gold-dk), var(--gold), var(--gold-lt));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
-    .nav-links { display: flex; gap: 32px; }
+    .nav-links { display: flex; gap: 36px; }
     .nav-links a {
-      color: rgba(245,243,238,0.55); font-size: 14px; font-weight: 500;
+      color: var(--ink-mid); font-size: 14px; font-weight: 500;
       text-decoration: none; transition: color .2s;
     }
-    .nav-links a:hover { color: var(--gold-lt); }
+    .nav-links a:hover { color: var(--gold-dk); }
     .nav-cta {
-      padding: 9px 22px; border-radius: 50px; font-size: 14px; font-weight: 700;
+      padding: 9px 24px; border-radius: 50px; font-size: 13px; font-weight: 700;
       background: linear-gradient(135deg, var(--gold), var(--gold-lt));
-      color: #0D0B09; cursor: pointer; border: none; text-decoration: none;
-      transition: opacity .2s;
+      color: #fff; cursor: pointer; border: none; text-decoration: none;
+      box-shadow: 0 4px 16px rgba(200,162,64,0.30);
+      transition: transform .2s, box-shadow .2s;
     }
-    .nav-cta:hover { opacity: .85; }
+    .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(200,162,64,0.40); }
 
-    /* ─────────────────── HERO ─────────────────── */
+    /* ── ORB LIGHTS ── */
+    .orb {
+      position: fixed; border-radius: 50%;
+      filter: blur(90px); pointer-events: none;
+      animation: drift 16s ease-in-out infinite;
+      z-index: 0;
+    }
+    .orb-1 { width: 700px; height: 700px; top: -200px; left: -150px; background: rgba(200,162,64,0.10); }
+    .orb-2 { width: 550px; height: 550px; top: 20%; right: -180px; background: rgba(160,110,230,0.09); animation-delay: -5s; }
+    .orb-3 { width: 450px; height: 450px; bottom: -100px; left: 25%; background: rgba(80,140,220,0.08); animation-delay: -10s; }
+    @keyframes drift {
+      0%,100% { transform: translate(0,0); }
+      33%      { transform: translate(24px,-18px); }
+      66%      { transform: translate(-18px,24px); }
+    }
+
+    /* ── HERO ── */
     .hero {
       position: relative; min-height: 100vh;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 120px 24px 80px;
-      overflow: hidden;
+      padding: 120px 40px 80px; z-index: 1;
     }
-
-    /* Background gradient orbs */
-    .orb {
-      position: absolute; border-radius: 50%;
-      filter: blur(80px); pointer-events: none; animation: drift 12s ease-in-out infinite;
-    }
-    .orb-1 { width: 600px; height: 600px; top: -200px; left: -100px; background: rgba(200,162,64,0.12); animation-delay: 0s; }
-    .orb-2 { width: 500px; height: 500px; top: 100px; right: -150px; background: rgba(120,80,200,0.10); animation-delay: -4s; }
-    .orb-3 { width: 400px; height: 400px; bottom: -100px; left: 30%; background: rgba(60,120,200,0.08); animation-delay: -8s; }
-
-    @keyframes drift {
-      0%,100% { transform: translate(0,0) scale(1); }
-      33%      { transform: translate(30px,-20px) scale(1.05); }
-      66%      { transform: translate(-20px,30px) scale(0.97); }
-    }
-
-    /* Hero grid */
     .hero-inner {
-      position: relative; z-index: 1;
-      display: grid; grid-template-columns: 1fr 420px; gap: 60px;
-      align-items: center; max-width: 1100px; width: 100%;
+      display: grid; grid-template-columns: 1fr 400px;
+      gap: 56px; align-items: center;
+      max-width: 1080px; width: 100%;
     }
 
     .hero-tag {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 6px 16px; border-radius: 50px; margin-bottom: 24px;
-      background: rgba(200,162,64,0.12); border: 1px solid rgba(200,162,64,0.30);
-      font-size: 12px; font-weight: 700; letter-spacing: 0.1em; color: var(--gold-lt);
-      text-transform: uppercase;
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 5px 15px; border-radius: 50px; margin-bottom: 22px;
+      background: rgba(200,162,64,0.10);
+      border: 1px solid rgba(200,162,64,0.28);
+      font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+      color: var(--gold-dk); text-transform: uppercase;
     }
-    .hero-tag::before { content:'✦'; font-size:10px; }
-
     .hero-h1 {
-      font-size: clamp(42px, 6vw, 72px);
-      font-weight: 900; line-height: 1.08; letter-spacing: -0.03em;
-      margin-bottom: 24px;
+      font-size: clamp(44px, 5.5vw, 70px);
+      font-weight: 900; line-height: 1.07; letter-spacing: -0.03em;
+      margin-bottom: 22px; color: rgba(20,18,16,0.92);
     }
     .hero-h1 em {
       font-style: normal;
-      background: linear-gradient(135deg, var(--gold-lt) 0%, var(--gold) 50%, var(--gold-dk) 100%);
+      background: linear-gradient(135deg, var(--gold-dk) 0%, var(--gold) 50%, var(--gold-lt) 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
-
     .hero-sub {
-      font-size: 17px; line-height: 1.7; color: rgba(245,243,238,0.55);
-      max-width: 480px; margin-bottom: 40px;
+      font-size: 16px; line-height: 1.75; color: var(--ink-mid);
+      max-width: 460px; margin-bottom: 38px;
     }
-
-    .hero-actions { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
-
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
     .btn-primary {
-      padding: 15px 34px; border-radius: 50px; font-size: 15px; font-weight: 800;
+      padding: 14px 32px; border-radius: 50px; font-size: 15px; font-weight: 800;
       background: linear-gradient(135deg, var(--gold), var(--gold-lt));
-      color: #0D0B09; border: none; cursor: pointer; text-decoration: none;
-      box-shadow: 0 8px 32px rgba(200,162,64,0.35);
+      color: #fff; border: none; cursor: pointer; text-decoration: none;
+      box-shadow: 0 6px 28px rgba(200,162,64,0.35);
       transition: transform .2s, box-shadow .2s;
     }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(200,162,64,0.45); }
-
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 36px rgba(200,162,64,0.45); }
     .btn-ghost {
-      padding: 14px 28px; border-radius: 50px; font-size: 15px; font-weight: 600;
-      background: var(--glass); border: 1px solid var(--glass-b);
-      color: rgba(245,243,238,0.8); cursor: pointer; text-decoration: none;
-      backdrop-filter: blur(12px);
+      padding: 13px 26px; border-radius: 50px; font-size: 15px; font-weight: 600;
+      background: var(--glass);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-b);
+      color: var(--ink-mid); cursor: pointer; text-decoration: none;
       transition: background .2s;
     }
-    .btn-ghost:hover { background: rgba(255,255,255,0.20); }
+    .btn-ghost:hover { background: rgba(255,255,255,0.72); }
 
     /* Character visual */
-    .hero-visual {
-      position: relative; display: flex; justify-content: center;
-    }
+    .hero-visual { position: relative; display: flex; justify-content: center; }
     .char-glow {
-      position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
-      width: 280px; height: 80px; border-radius: 50%;
-      background: radial-gradient(ellipse, rgba(200,162,64,0.35) 0%, transparent 70%);
-      filter: blur(12px);
-      animation: pulseGlow 3s ease-in-out infinite;
+      position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
+      width: 260px; height: 60px; border-radius: 50%;
+      background: radial-gradient(ellipse, rgba(200,162,64,0.22) 0%, transparent 70%);
+      filter: blur(14px);
+      animation: pulseGlow 3.5s ease-in-out infinite;
     }
-    @keyframes pulseGlow { 0%,100%{opacity:.6;transform:translateX(-50%) scaleX(1)} 50%{opacity:1;transform:translateX(-50%) scaleX(1.2)} }
-
+    @keyframes pulseGlow {
+      0%,100% { opacity:.5; transform:translateX(-50%) scaleX(1); }
+      50%      { opacity:1; transform:translateX(-50%) scaleX(1.18); }
+    }
     .char-img {
-      height: 540px; width: auto; object-fit: contain; position: relative; z-index: 1;
-      filter: drop-shadow(0 20px 60px rgba(120,80,220,0.25)) drop-shadow(0 0 40px rgba(200,162,64,0.15));
+      height: 520px; width: auto; object-fit: contain; position: relative; z-index: 1;
+      filter: drop-shadow(0 16px 50px rgba(120,80,200,0.14)) drop-shadow(0 4px 16px rgba(0,0,0,0.08));
       animation: charFloat 5s ease-in-out infinite;
     }
-    @keyframes charFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
+    @keyframes charFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-13px)} }
 
-    /* Floating bubbles around character */
+    /* Floating bubbles */
     .bubble {
       position: absolute; display: flex; align-items: center; gap: 8px;
-      padding: 10px 16px 10px 10px; border-radius: 50px; z-index: 2;
-      background: rgba(255,255,255,0.10);
-      backdrop-filter: blur(20px) saturate(160%);
-      border: 1px solid rgba(255,255,255,0.20);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.3);
-      font-size: 12px; font-weight: 600; color: rgba(245,243,238,0.9);
+      padding: 9px 15px 9px 9px; border-radius: 50px; z-index: 2;
+      background: rgba(255,255,255,0.60);
+      backdrop-filter: blur(22px) saturate(180%);
+      -webkit-backdrop-filter: blur(22px) saturate(180%);
+      border: 1px solid rgba(255,255,255,0.85);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.95);
+      font-size: 12px; font-weight: 600; color: rgba(20,18,16,0.75);
       white-space: nowrap;
     }
     .bubble-icon {
-      width: 28px; height: 28px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center; font-size: 13px;
-      flex-shrink: 0;
+      width: 26px; height: 26px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0;
     }
-    .b1 { top: 60px; left: -80px; animation: bFloat 3.5s ease-in-out infinite; }
-    .b2 { top: 160px; right: -90px; animation: bFloat 4s ease-in-out .6s infinite; }
-    .b3 { bottom: 180px; left: -60px; animation: bFloat 3.8s ease-in-out 1.2s infinite; }
-    .b4 { bottom: 80px; right: -80px; animation: bFloat 4.2s ease-in-out 1.8s infinite; }
+    .b1 { top: 55px; left: -85px; animation: bFloat 3.5s ease-in-out infinite; }
+    .b2 { top: 170px; right: -95px; animation: bFloat 4s ease-in-out .55s infinite; }
+    .b3 { bottom: 185px; left: -65px; animation: bFloat 3.8s ease-in-out 1.1s infinite; }
+    .b4 { bottom: 85px; right: -85px; animation: bFloat 4.3s ease-in-out 1.7s infinite; }
     @keyframes bFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
 
     /* Stats strip */
     .stats-strip {
-      position: relative; z-index: 1;
-      display: flex; gap: 0; margin-top: 64px; max-width: 1100px; width: 100%;
-      background: var(--glass); backdrop-filter: blur(20px);
-      border: 1px solid rgba(255,255,255,0.10); border-radius: 20px; overflow: hidden;
+      display: flex; max-width: 1080px; width: 100%;
+      margin-top: 60px; border-radius: 24px; overflow: hidden;
+      background: rgba(255,255,255,0.52);
+      backdrop-filter: blur(22px) saturate(160%);
+      -webkit-backdrop-filter: blur(22px) saturate(160%);
+      border: 1px solid rgba(255,255,255,0.78);
+      box-shadow: 0 4px 28px rgba(0,0,0,0.05);
     }
     .stat-item {
-      flex: 1; padding: 24px 32px; text-align: center;
-      border-right: 1px solid rgba(255,255,255,0.08);
+      flex: 1; padding: 24px 28px; text-align: center;
+      border-right: 1px solid rgba(255,255,255,0.65);
     }
     .stat-item:last-child { border-right: none; }
     .stat-num {
-      font-size: 32px; font-weight: 900; letter-spacing: -0.02em;
-      background: linear-gradient(135deg, var(--gold-lt), var(--gold));
+      font-size: 30px; font-weight: 900; letter-spacing: -0.02em;
+      background: linear-gradient(135deg, var(--gold-dk), var(--gold));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
-    .stat-label { font-size: 12px; color: rgba(245,243,238,0.45); margin-top: 4px; }
+    .stat-label { font-size: 11px; color: var(--ink-dim); margin-top: 4px; }
 
-    /* ─────────────────── SECTION COMMON ─────────────────── */
-    section { position: relative; z-index: 1; padding: 100px 40px; max-width: 1140px; margin: 0 auto; }
-
+    /* ── SECTION COMMON ── */
+    section { position: relative; z-index: 1; padding: 100px 40px; max-width: 1100px; margin: 0 auto; }
     .section-tag {
-      display: inline-block; margin-bottom: 16px;
+      display: inline-block; margin-bottom: 14px;
       font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
-      color: var(--gold); background: rgba(200,162,64,0.10);
-      padding: 5px 14px; border-radius: 50px; border: 1px solid rgba(200,162,64,0.25);
+      color: var(--gold-dk); background: rgba(200,162,64,0.09);
+      padding: 5px 14px; border-radius: 50px; border: 1px solid rgba(200,162,64,0.22);
     }
     .section-h2 {
       font-size: clamp(32px, 4vw, 52px); font-weight: 900; line-height: 1.1;
-      letter-spacing: -0.03em; margin-bottom: 16px;
+      letter-spacing: -0.03em; margin-bottom: 14px; color: rgba(20,18,16,0.92);
     }
     .section-h2 em {
       font-style: normal;
-      background: linear-gradient(135deg, var(--gold-lt), var(--gold));
+      background: linear-gradient(135deg, var(--gold-dk), var(--gold));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
-    .section-sub { font-size: 16px; color: rgba(245,243,238,0.50); line-height: 1.7; max-width: 520px; }
+    .section-sub { font-size: 16px; color: var(--ink-mid); line-height: 1.72; max-width: 500px; }
 
-    /* ─────────────────── HOW IT WORKS ─────────────────── */
-    .steps {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 60px;
+    /* Glass card mixin */
+    .gc {
+      background: rgba(255,255,255,0.55);
+      backdrop-filter: blur(22px) saturate(160%);
+      -webkit-backdrop-filter: blur(22px) saturate(160%);
+      border: 1px solid rgba(255,255,255,0.78);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.05);
     }
+
+    /* ── HOW IT WORKS ── */
+    .steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-top: 56px; }
     .step-card {
-      padding: 36px 28px; border-radius: 24px;
-      background: var(--glass); border: 1px solid rgba(255,255,255,0.09);
-      backdrop-filter: blur(16px);
-      position: relative; overflow: hidden;
-      transition: transform .3s, border-color .3s;
+      padding: 34px 26px; border-radius: 24px;
+      transition: transform .3s, box-shadow .3s;
     }
-    .step-card:hover { transform: translateY(-6px); border-color: rgba(200,162,64,0.30); }
+    .step-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 40px rgba(200,162,64,0.12), 0 4px 16px rgba(0,0,0,0.06);
+    }
     .step-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(200,162,64,0.40), transparent);
+      content: ''; display: block; height: 2px; border-radius: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-lt));
+      margin-bottom: 24px; width: 36px;
     }
-    .step-num {
-      font-size: 11px; font-weight: 800; letter-spacing: 0.12em; color: var(--gold);
-      margin-bottom: 20px; text-transform: uppercase;
-    }
-    .step-icon {
-      width: 52px; height: 52px; border-radius: 16px; margin-bottom: 20px;
-      display: flex; align-items: center; justify-content: center; font-size: 24px;
-      background: rgba(200,162,64,0.10); border: 1px solid rgba(200,162,64,0.20);
-    }
-    .step-h3 { font-size: 20px; font-weight: 800; margin-bottom: 10px; line-height: 1.2; }
-    .step-p { font-size: 14px; color: rgba(245,243,238,0.50); line-height: 1.7; }
+    .step-num { font-size: 10px; font-weight: 800; letter-spacing: 0.14em; color: var(--gold); margin-bottom: 16px; text-transform: uppercase; }
+    .step-icon { font-size: 32px; margin-bottom: 16px; }
+    .step-h3 { font-size: 19px; font-weight: 800; margin-bottom: 10px; color: rgba(20,18,16,0.90); }
+    .step-p { font-size: 14px; color: var(--ink-mid); line-height: 1.72; }
 
-    /* ─────────────────── FEATURES BENTO ─────────────────── */
-    .bento {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: auto auto;
-      gap: 20px; margin-top: 60px;
-    }
-    .bento-card {
-      padding: 32px; border-radius: 24px;
-      background: var(--glass); border: 1px solid rgba(255,255,255,0.09);
-      backdrop-filter: blur(16px); overflow: hidden; position: relative;
-      transition: transform .3s, border-color .3s;
-    }
-    .bento-card:hover { transform: translateY(-4px); border-color: rgba(200,162,64,0.25); }
+    /* ── BENTO FEATURES ── */
+    .bento { display: grid; grid-template-columns: repeat(3,1fr); grid-template-rows: auto auto; gap: 18px; margin-top: 56px; }
+    .bento-card { padding: 30px; border-radius: 24px; transition: transform .3s; position: relative; overflow: hidden; }
+    .bento-card:hover { transform: translateY(-4px); }
     .bento-card.wide { grid-column: span 2; }
-    .bento-card.tall { grid-row: span 2; }
-
     .bento-card::after {
-      content: ''; position: absolute; inset: 0; border-radius: 24px;
-      background: radial-gradient(circle at 80% 20%, rgba(200,162,64,0.06) 0%, transparent 60%);
-      pointer-events: none;
+      content:''; position:absolute; top:0; right:0; width:120px; height:120px;
+      background: radial-gradient(circle, rgba(200,162,64,0.07) 0%, transparent 70%);
+      pointer-events:none;
     }
-
-    .feat-emoji { font-size: 36px; margin-bottom: 20px; display: block; }
-    .feat-h3 { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
-    .feat-p { font-size: 13px; color: rgba(245,243,238,0.48); line-height: 1.7; }
+    .feat-emoji { font-size: 32px; margin-bottom: 16px; display: block; }
+    .feat-h3 { font-size: 17px; font-weight: 800; margin-bottom: 8px; color: rgba(20,18,16,0.90); }
+    .feat-p { font-size: 13px; color: var(--ink-mid); line-height: 1.72; }
 
     /* Match score demo */
     .match-demo {
-      margin-top: 24px; padding: 16px; border-radius: 16px;
-      background: rgba(0,0,0,0.30); border: 1px solid rgba(255,255,255,0.08);
+      margin-top: 22px; padding: 16px; border-radius: 16px;
+      background: rgba(255,255,255,0.55); border: 1px solid rgba(255,255,255,0.8);
     }
-    .match-bar-wrap { margin-top: 10px; }
-    .match-label { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 5px; color: rgba(245,243,238,0.50); }
-    .match-bar { height: 5px; border-radius: 50px; background: rgba(255,255,255,0.08); overflow: hidden; }
-    .match-fill { height: 100%; border-radius: 50px; background: linear-gradient(90deg, var(--gold), var(--gold-lt)); }
+    .match-label { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 5px; color: var(--ink-dim); }
+    .match-bar { height: 5px; border-radius: 50px; background: rgba(0,0,0,0.07); overflow: hidden; margin-bottom: 10px; }
+    .match-fill { height: 100%; border-radius: 50px; background: linear-gradient(90deg, var(--gold-dk), var(--gold-lt)); }
 
-    /* ─────────────────── SQUARE / PRICING ─────────────────── */
-    .pricing-wrapper {
-      margin-top: 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
-    }
-    .price-card {
-      padding: 40px; border-radius: 28px; position: relative; overflow: hidden;
-      transition: transform .3s;
-    }
-    .price-card:hover { transform: translateY(-6px); }
-    .price-card.basic {
-      background: var(--glass); border: 1px solid rgba(255,255,255,0.09);
-      backdrop-filter: blur(16px);
-    }
+    /* ── PRICING ── */
+    .pricing-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 56px; }
+    .price-card { padding: 38px; border-radius: 28px; transition: transform .3s; }
+    .price-card:hover { transform: translateY(-5px); }
     .price-card.premium {
-      background: linear-gradient(145deg, rgba(200,162,64,0.18), rgba(200,162,64,0.06));
-      border: 1px solid rgba(200,162,64,0.40);
+      background: linear-gradient(145deg, rgba(200,162,64,0.10), rgba(200,162,64,0.04)) !important;
+      border: 1.5px solid rgba(200,162,64,0.38) !important;
+      position: relative;
     }
     .price-card.premium::before {
-      content: ''; position: absolute; top: 0; inset-x: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(200,162,64,0.80), transparent);
+      content:''; position:absolute; top:0; inset-x:0; height:1.5px; border-radius:28px 28px 0 0;
+      background: linear-gradient(90deg, transparent, rgba(200,162,64,0.7), transparent);
     }
     .price-badge {
-      display: inline-block; padding: 4px 12px; border-radius: 50px; font-size: 11px; font-weight: 700;
-      background: linear-gradient(135deg, var(--gold), var(--gold-lt)); color: #0D0B09; margin-bottom: 20px;
+      display: inline-block; padding: 4px 12px; border-radius: 50px;
+      font-size: 10px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
+      background: linear-gradient(135deg, var(--gold), var(--gold-lt)); color: #fff; margin-bottom: 18px;
     }
-    .price-title { font-size: 24px; font-weight: 900; margin-bottom: 8px; }
+    .price-title { font-size: 22px; font-weight: 900; margin-bottom: 6px; color: rgba(20,18,16,0.90); }
     .price-amount {
-      font-size: 48px; font-weight: 900; line-height: 1; margin: 16px 0;
-      background: linear-gradient(135deg, var(--gold-lt), var(--gold));
+      font-size: 46px; font-weight: 900; line-height: 1; margin: 14px 0;
+      background: linear-gradient(135deg, var(--gold-dk), var(--gold));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
-    .price-amount span { font-size: 18px; font-weight: 500; }
-    .price-desc { font-size: 13px; color: rgba(245,243,238,0.50); line-height: 1.7; margin-bottom: 28px; }
+    .price-amount span { font-size: 16px; font-weight: 500; }
+    .price-desc { font-size: 13px; color: var(--ink-mid); line-height: 1.72; margin-bottom: 26px; }
     .price-features { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-    .price-features li { display: flex; gap: 10px; font-size: 14px; color: rgba(245,243,238,0.70); align-items: flex-start; }
-    .price-features li::before { content: '✦'; color: var(--gold); font-size: 10px; margin-top: 4px; flex-shrink: 0; }
+    .price-features li { display: flex; gap: 10px; font-size: 14px; color: var(--ink-mid); align-items: flex-start; }
+    .price-features li::before { content:'✦'; color:var(--gold); font-size:9px; margin-top:5px; flex-shrink:0; }
 
-    /* ─────────────────── TESTIMONIALS ─────────────────── */
-    .testimonials {
-      display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-top: 60px;
-    }
-    .testi-card {
-      padding: 28px; border-radius: 20px;
-      background: var(--glass); border: 1px solid rgba(255,255,255,0.08);
-      backdrop-filter: blur(12px);
-    }
-    .testi-stars { color: var(--gold); font-size: 13px; letter-spacing: 2px; margin-bottom: 14px; }
-    .testi-text { font-size: 14px; line-height: 1.7; color: rgba(245,243,238,0.70); margin-bottom: 20px; }
-    .testi-user { display: flex; align-items: center; gap: 12px; }
+    /* ── TESTIMONIALS ── */
+    .testimonials { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; margin-top: 56px; }
+    .testi-card { padding: 26px; border-radius: 22px; }
+    .testi-stars { color: var(--gold); font-size: 12px; letter-spacing: 2px; margin-bottom: 12px; }
+    .testi-text { font-size: 14px; line-height: 1.72; color: var(--ink-mid); margin-bottom: 18px; }
+    .testi-user { display: flex; align-items: center; gap: 10px; }
     .testi-avatar {
-      width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      font-weight: 800; font-size: 15px;
-      background: linear-gradient(135deg, var(--gold), var(--gold-lt)); color: #0D0B09;
+      width: 36px; height: 36px; border-radius: 50%; display: flex;
+      align-items: center; justify-content: center; font-weight: 800; font-size: 14px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-lt)); color: #fff;
     }
-    .testi-name { font-size: 13px; font-weight: 700; }
-    .testi-meta { font-size: 11px; color: rgba(245,243,238,0.38); }
+    .testi-name { font-size: 13px; font-weight: 700; color: rgba(20,18,16,0.85); }
+    .testi-meta { font-size: 11px; color: var(--ink-dim); }
 
-    /* ─────────────────── CTA FINAL ─────────────────── */
+    /* ── FINAL CTA ── */
     .cta-section {
-      padding: 120px 40px; text-align: center;
-      display: flex; flex-direction: column; align-items: center; gap: 24px;
-      position: relative; overflow: hidden;
+      position: relative; z-index: 1;
+      padding: 110px 40px; text-align: center;
+      display: flex; flex-direction: column; align-items: center; gap: 20px;
     }
-    .cta-glow {
-      position: absolute; width: 600px; height: 600px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(200,162,64,0.12) 0%, transparent 70%);
-      pointer-events: none; filter: blur(40px);
+    .cta-card {
+      max-width: 760px; width: 100%;
+      padding: 64px 56px; border-radius: 36px;
+      background: rgba(255,255,255,0.62);
+      backdrop-filter: blur(28px) saturate(180%);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+      border: 1px solid rgba(255,255,255,0.85);
+      box-shadow: 0 8px 48px rgba(0,0,0,0.06);
     }
     .cta-h2 {
-      font-size: clamp(36px,5vw,64px); font-weight: 900; line-height: 1.1;
-      letter-spacing: -0.03em; max-width: 700px; position: relative; z-index: 1;
+      font-size: clamp(32px, 4.5vw, 58px); font-weight: 900; line-height: 1.1;
+      letter-spacing: -0.03em; color: rgba(20,18,16,0.92); margin-bottom: 16px;
     }
-    .cta-sub {
-      font-size: 16px; color: rgba(245,243,238,0.45); max-width: 440px;
-      line-height: 1.7; position: relative; z-index: 1;
-    }
+    .cta-sub { font-size: 16px; color: var(--ink-mid); line-height: 1.72; max-width: 420px; margin: 0 auto 32px; }
 
-    /* ─────────────────── FOOTER ─────────────────── */
+    /* ── FOOTER ── */
     footer {
-      border-top: 1px solid rgba(255,255,255,0.07);
-      padding: 40px; text-align: center;
-      font-size: 13px; color: rgba(245,243,238,0.25);
+      border-top: 1px solid rgba(0,0,0,0.06);
+      padding: 36px 40px; text-align: center;
+      font-size: 13px; color: var(--ink-dim); position: relative; z-index: 1;
     }
     footer strong {
-      background: linear-gradient(135deg, var(--gold-lt), var(--gold));
+      background: linear-gradient(135deg, var(--gold-dk), var(--gold));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
 
-    /* ─────────────────── SCROLL REVEAL ─────────────────── */
-    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .65s ease, transform .65s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
-    /* ─────────────────── RESPONSIVE ─────────────────── */
+    /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
       .hero-inner { grid-template-columns: 1fr; text-align: center; }
+      .hero-sub { max-width: 100%; }
       .hero-visual { display: none; }
       .steps, .bento, .pricing-wrapper, .testimonials { grid-template-columns: 1fr; }
-      .bento-card.wide, .bento-card.tall { grid-column: auto; grid-row: auto; }
-      nav { padding: 16px 20px; }
+      .bento-card.wide { grid-column: auto; }
+      nav { padding: 14px 20px; }
       .nav-links { display: none; }
-      section { padding: 70px 20px; }
-      .stats-strip { flex-wrap: wrap; }
-      .stat-item { flex: 1 1 50%; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
+      section { padding: 64px 20px; }
+      .stats-strip { flex-wrap: wrap; border-radius: 20px; }
+      .stat-item { flex: 1 1 50%; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.65); }
+      .cta-card { padding: 44px 28px; }
     }
   </style>
 </head>
 <body>
+
+<!-- Ambient orbs -->
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
 
 <!-- ── NAV ── -->
 <nav>
@@ -403,23 +381,14 @@
 
 <!-- ── HERO ── -->
 <div class="hero">
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
-
   <div class="hero-inner reveal">
-    <!-- Left: copy -->
     <div>
-      <div class="hero-tag">AI 驱动精准匹配</div>
-      <h1 class="hero-h1">
-        找到<br/>
-        <em>真正合适</em><br/>
-        的那个人
-      </h1>
+      <div class="hero-tag">✦ AI 驱动精准匹配</div>
+      <h1 class="hero-h1">找到<br/><em>真正合适</em><br/>的那个人</h1>
       <p class="hero-sub">
         不是随机展示，不是靠运气。<br/>
         Muse 用 AI 深度理解你是什么样的人、喜欢什么样的人，
-        然后帮你找到四个维度同时对齐的那个人。
+        从颜值、性格、价值观、感情意图四个维度帮你精准匹配。
       </p>
       <div class="hero-actions">
         <a href="/register" class="btn-primary">免费开始匹配</a>
@@ -427,48 +396,34 @@
       </div>
     </div>
 
-    <!-- Right: character -->
     <div class="hero-visual">
       <div class="char-glow"></div>
       <img src="./avatar-character.png" class="char-img" alt="小me" />
 
       <div class="bubble b1">
-        <div class="bubble-icon" style="background:rgba(79,142,247,0.20)">🧭</div>
+        <div class="bubble-icon" style="background:rgba(79,142,247,0.15)">🧭</div>
         今日推荐 · 97% 契合
       </div>
       <div class="bubble b2">
-        <div class="bubble-icon" style="background:rgba(200,162,64,0.20)">⭐</div>
+        <div class="bubble-icon" style="background:rgba(200,162,64,0.15)">⭐</div>
         绝配广场已解锁
       </div>
       <div class="bubble b3">
-        <div class="bubble-icon" style="background:rgba(240,96,128,0.20)">💝</div>
+        <div class="bubble-icon" style="background:rgba(240,96,128,0.15)">💝</div>
         3 人喜欢了你
       </div>
       <div class="bubble b4">
-        <div class="bubble-icon" style="background:rgba(45,201,138,0.20)">💬</div>
+        <div class="bubble-icon" style="background:rgba(45,201,138,0.15)">💬</div>
         新消息 · 林晓
       </div>
     </div>
   </div>
 
-  <!-- Stats -->
   <div class="stats-strip reveal">
-    <div class="stat-item">
-      <div class="stat-num">2.4亿</div>
-      <div class="stat-label">中国单身人口</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-num">4维</div>
-      <div class="stat-label">颜值·性格·价值观·意图</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-num">¥100</div>
-      <div class="stat-label">双向付费代表认真</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-num">60天</div>
-      <div class="stat-label">无回应全额退款</div>
-    </div>
+    <div class="stat-item"><div class="stat-num">2.4亿</div><div class="stat-label">中国单身人口</div></div>
+    <div class="stat-item"><div class="stat-num">4 维</div><div class="stat-label">颜值 · 性格 · 价值观 · 意图</div></div>
+    <div class="stat-item"><div class="stat-num">¥100</div><div class="stat-label">双向付费代表认真</div></div>
+    <div class="stat-item"><div class="stat-num">60天</div><div class="stat-label">无回应全额退款</div></div>
   </div>
 </div>
 
@@ -480,23 +435,23 @@
     <p class="section-sub">和大多数交友软件不同，我们在推荐给你之前，已经做了绝大部分工作。</p>
   </div>
   <div class="steps">
-    <div class="step-card reveal">
+    <div class="step-card gc reveal">
       <div class="step-num">Step 01</div>
       <div class="step-icon">🤖</div>
       <h3 class="step-h3">AI 读懂你</h3>
-      <p class="step-p">和 AI 助手小me 聊聊天，说说自己是什么样的人、喜欢什么样的人。小me 会从对话里提取你的审美偏好和价值观，构建你的专属档案。</p>
+      <p class="step-p">和 AI 助手小me 聊几句，小me 从对话里提取你的审美与价值观，构建你的专属多维档案。说不清楚自己喜欢什么也没关系——AI 比你更早知道。</p>
     </div>
-    <div class="step-card reveal" style="transition-delay:.1s">
+    <div class="step-card gc reveal" style="transition-delay:.1s">
       <div class="step-num">Step 02</div>
       <div class="step-icon">🎯</div>
       <h3 class="step-h3">双轮精准筛选</h3>
-      <p class="step-p">第一轮：AI 分析你的审美偏好，过滤颜值不合适的人。第二轮：深层比对价值观、生活方式、感情意图。只有两轮都通过的人才会出现在你面前。</p>
+      <p class="step-p">第一轮过滤审美不合适的人，第二轮深层比对价值观与感情意图。只有两轮都通过的人才出现在你面前，每天约 21 位，附契合度百分比。</p>
     </div>
-    <div class="step-card reveal" style="transition-delay:.2s">
+    <div class="step-card gc reveal" style="transition-delay:.2s">
       <div class="step-num">Step 03</div>
       <div class="step-icon">💎</div>
       <h3 class="step-h3">认真才能匹配</h3>
-      <p class="step-p">绝配广场的候选人需双向付费才能正式匹配。两个人都花了钱，代表两个人都认真。不认真的人，在第一步就被过滤了。</p>
+      <p class="step-p">绝配广场双向付费确认认真程度。两个人都花了钱，说明两个人都是真的想找。随便玩的人，在第一步就被过滤了。</p>
     </div>
   </div>
 </section>
@@ -506,58 +461,47 @@
   <div class="reveal">
     <div class="section-tag">核心 AI 能力</div>
     <h2 class="section-h2">不只是<em>推荐算法</em></h2>
-    <p class="section-sub">我们在每一个关键环节都用了 AI——不是噱头，是真正改变匹配质量的能力。</p>
+    <p class="section-sub">每一个关键环节都有 AI 参与——不是噱头，是真正改变匹配质量的能力。</p>
   </div>
   <div class="bento">
-    <div class="bento-card wide reveal">
+    <div class="bento-card wide gc reveal">
       <span class="feat-emoji">👁️</span>
       <h3 class="feat-h3">审美 Embedding —— 你真正喜欢什么样的人</h3>
-      <p class="feat-p">上传前任或理想型的照片，AI 提取你真实的审美倾向，转化为向量用于匹配。人们喜欢的样子藏在过去的选择里，而不是填写的表单里。</p>
+      <p class="feat-p">上传前任或理想型的照片，AI 提取你真实的审美倾向转化为向量用于匹配。人们喜欢的样子藏在过去的选择里，而不是填写的表单里。</p>
       <div class="match-demo">
-        <div style="font-size:11px;color:rgba(245,243,238,0.4);margin-bottom:10px">AI 学习你的审美偏好</div>
-        <div class="match-bar-wrap">
-          <div class="match-label"><span>颜值契合度</span><span style="color:var(--gold-lt)">94%</span></div>
-          <div class="match-bar"><div class="match-fill" style="width:94%"></div></div>
-        </div>
-        <div class="match-bar-wrap" style="margin-top:8px">
-          <div class="match-label"><span>价值观契合</span><span style="color:var(--gold-lt)">88%</span></div>
-          <div class="match-bar"><div class="match-fill" style="width:88%"></div></div>
-        </div>
-        <div class="match-bar-wrap" style="margin-top:8px">
-          <div class="match-label"><span>感情意图一致</span><span style="color:var(--gold-lt)">✓ 一致</span></div>
-          <div class="match-bar"><div class="match-fill" style="width:100%"></div></div>
-        </div>
+        <div style="font-size:11px;color:var(--ink-dim);margin-bottom:12px;font-weight:600">AI 学习你的审美偏好</div>
+        <div class="match-label"><span>颜值契合度</span><span style="color:var(--gold-dk);font-weight:700">94%</span></div>
+        <div class="match-bar"><div class="match-fill" style="width:94%"></div></div>
+        <div class="match-label"><span>价值观契合</span><span style="color:var(--gold-dk);font-weight:700">88%</span></div>
+        <div class="match-bar"><div class="match-fill" style="width:88%"></div></div>
+        <div class="match-label"><span>感情意图一致</span><span style="color:var(--gold-dk);font-weight:700">✓ 一致</span></div>
+        <div class="match-bar"><div class="match-fill" style="width:100%"></div></div>
       </div>
     </div>
-
-    <div class="bento-card reveal" style="transition-delay:.1s">
+    <div class="bento-card gc reveal" style="transition-delay:.1s">
       <span class="feat-emoji">🧠</span>
       <h3 class="feat-h3">Persona Embedding</h3>
-      <p class="feat-p">多维度人格向量。匹配时用「你是谁」对比「对方是谁」，不只是年龄和城市。</p>
+      <p class="feat-p">多维度人格向量化。匹配时用「你是谁」对比「对方是谁」，不只是年龄和城市。</p>
     </div>
-
-    <div class="bento-card reveal" style="transition-delay:.15s">
+    <div class="bento-card gc reveal" style="transition-delay:.15s">
       <span class="feat-emoji">🎭</span>
       <h3 class="feat-h3">意图识别</h3>
       <p class="feat-p">AI 识别每个用户当下的感情意图——随便聊 / 认真找 / 考虑结婚。只匹配意图一致的人。</p>
     </div>
-
-    <div class="bento-card reveal" style="transition-delay:.2s">
+    <div class="bento-card gc reveal" style="transition-delay:.2s">
       <span class="feat-emoji">💬</span>
       <h3 class="feat-h3">聊天辅助</h3>
-      <p class="feat-p">不知道说什么？AI 实时给出话题建议和表达辅助，让每次对话都有好的开始。</p>
+      <p class="feat-p">不知道说什么？AI 实时话题建议 + 表达辅助，让每次对话都有好的开始。</p>
     </div>
-
-    <div class="bento-card reveal" style="transition-delay:.25s">
+    <div class="bento-card gc reveal" style="transition-delay:.25s">
       <span class="feat-emoji">🧬</span>
       <h3 class="feat-h3">持续进化的记忆</h3>
-      <p class="feat-p">小me 记住你每次说的话、每次的选择，用得越久，越懂你，匹配越准。</p>
+      <p class="feat-p">小me 记住你每次的选择和偏好变化，用得越久越懂你，匹配越来越准。</p>
     </div>
-
-    <div class="bento-card reveal" style="transition-delay:.3s">
+    <div class="bento-card gc reveal" style="transition-delay:.3s">
       <span class="feat-emoji">🔒</span>
       <h3 class="feat-h3">隐私优先</h3>
-      <p class="feat-p">前任照片、审美数据仅 AI 学习使用，永远不对其他用户展示。你的私密是私密。</p>
+      <p class="feat-p">前任照片、审美数据仅 AI 内部学习，永远不对其他用户展示。</p>
     </div>
   </div>
 </section>
@@ -570,23 +514,23 @@
     <p class="section-sub">不为功能付钱，为找到人付钱。找到了，钱就值了。</p>
   </div>
   <div class="pricing-wrapper">
-    <div class="price-card basic reveal">
+    <div class="price-card gc reveal">
       <div class="price-title">普通匹配</div>
-      <div class="price-amount">免费<span></span></div>
+      <div class="price-amount">免费</div>
       <p class="price-desc">每日 21 个 AI 精准推荐，双方互喜即可开始聊天，完全免费。</p>
       <ul class="price-features">
         <li>每日 21 个高质量推荐</li>
         <li>显示契合度百分比</li>
         <li>双向喜欢即匹配，免费聊天</li>
-        <li>AI 助手小me 陪伴全程</li>
+        <li>AI 助手小me 全程陪伴</li>
         <li>聊天话题建议</li>
       </ul>
     </div>
-    <div class="price-card premium reveal" style="transition-delay:.1s">
+    <div class="price-card gc premium reveal" style="transition-delay:.1s">
       <div class="price-badge">★ 绝配广场</div>
       <div class="price-title">精准高端匹配</div>
-      <div class="price-amount">¥100<span>/次匹配</span></div>
-      <p class="price-desc">双方各付 ¥100，代表双方都认真。60 天内对方无回应，全额退款。</p>
+      <div class="price-amount">¥100<span>/次</span></div>
+      <p class="price-desc">双方各付 ¥100，代表双方都认真。60 天内无回应全额退款。</p>
       <ul class="price-features">
         <li>系统最高匹配度候选池</li>
         <li>¥1 解锁查看完整资料</li>
@@ -606,37 +550,28 @@
     <h2 class="section-h2">他们找到了<em>对的人</em></h2>
   </div>
   <div class="testimonials">
-    <div class="testi-card reveal">
+    <div class="testi-card gc reveal">
       <div class="testi-stars">★★★★★</div>
-      <p class="testi-text">用了三年探探，一个都没谈成。用 Muse 两个月，现在已经在一起了。绝配广场的那个 94% 是真的准。</p>
+      <p class="testi-text">用了三年探探，一个都没谈成。用 Muse 两个月，现在已经在一起了。绝配广场那个 94% 是真的准。</p>
       <div class="testi-user">
         <div class="testi-avatar">陈</div>
-        <div>
-          <div class="testi-name">陈先生</div>
-          <div class="testi-meta">北京 · 28 岁 · 产品经理</div>
-        </div>
+        <div><div class="testi-name">陈先生</div><div class="testi-meta">北京 · 28 岁 · 产品经理</div></div>
       </div>
     </div>
-    <div class="testi-card reveal" style="transition-delay:.1s">
+    <div class="testi-card gc reveal" style="transition-delay:.1s">
       <div class="testi-stars">★★★★★</div>
-      <p class="testi-text">最喜欢的是双向付费这个机制。对面知道你是认真的，聊天质量完全不一样，不会刚加上就消失。</p>
+      <p class="testi-text">双向付费这个机制真的很好。对方知道你是认真的，聊天质量完全不一样，不会刚加上就消失。</p>
       <div class="testi-user">
         <div class="testi-avatar">林</div>
-        <div>
-          <div class="testi-name">林小姐</div>
-          <div class="testi-meta">上海 · 26 岁 · 律师</div>
-        </div>
+        <div><div class="testi-name">林小姐</div><div class="testi-meta">上海 · 26 岁 · 律师</div></div>
       </div>
     </div>
-    <div class="testi-card reveal" style="transition-delay:.2s">
+    <div class="testi-card gc reveal" style="transition-delay:.2s">
       <div class="testi-stars">★★★★★</div>
-      <p class="testi-text">跟小me 聊完之后才意识到，我之前找的人根本不是我真正想要的类型。AI 比我更了解我自己。</p>
+      <p class="testi-text">跟小me 聊完才意识到，我之前找的人根本不是我真正想要的。AI 比我更了解我自己。</p>
       <div class="testi-user">
         <div class="testi-avatar">王</div>
-        <div>
-          <div class="testi-name">王先生</div>
-          <div class="testi-meta">深圳 · 31 岁 · 创业者</div>
-        </div>
+        <div><div class="testi-name">王先生</div><div class="testi-meta">深圳 · 31 岁 · 创业者</div></div>
       </div>
     </div>
   </div>
@@ -644,27 +579,27 @@
 
 <!-- ── FINAL CTA ── -->
 <div class="cta-section">
-  <div class="cta-glow"></div>
-  <p class="section-tag reveal">开始你的旅程</p>
-  <h2 class="cta-h2 reveal">你值得遇见<br/><em>真正合适的人</em></h2>
-  <p class="cta-sub reveal">加入 Muse 觅Ta，让 AI 帮你找到那个颜值、性格、价值观、感情意图四个维度都对的人。</p>
-  <div style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1" class="reveal">
-    <a href="/register" class="btn-primary" style="font-size:16px;padding:16px 40px">免费开始匹配 →</a>
-    <a href="/login" class="btn-ghost">已有账号，去登录</a>
+  <div class="cta-card reveal">
+    <div class="section-tag" style="margin-bottom:20px">开始你的旅程</div>
+    <h2 class="cta-h2">你值得遇见<br/><em>真正合适的人</em></h2>
+    <p class="cta-sub">加入 Muse 觅Ta，让 AI 帮你找到那个颜值、性格、价值观、感情意图都对的人。</p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
+      <a href="/register" class="btn-primary" style="font-size:15px;padding:15px 38px">免费开始匹配 →</a>
+      <a href="/login" class="btn-ghost">已有账号，去登录</a>
+    </div>
   </div>
 </div>
 
 <!-- ── FOOTER ── -->
 <footer>
-  <strong>Muse 觅Ta</strong> · 找到真正合适的人 · © 2026
+  <strong>Muse 觅Ta</strong> &nbsp;·&nbsp; 找到真正合适的人 &nbsp;·&nbsp; © 2026 郑州樽煜科技有限公司
 </footer>
 
-<!-- ── Scroll reveal JS ── -->
 <script>
   const els = document.querySelectorAll('.reveal')
   const io = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target) } })
-  }, { threshold: 0.12 })
+  }, { threshold: 0.10 })
   els.forEach(el => io.observe(el))
 </script>
 </body>
